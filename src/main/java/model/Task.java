@@ -21,8 +21,15 @@ public class Task {
     @BsonProperty("priority")
     int priority;
     @BsonProperty("status")
-    String status = "New";
+    String status;
 
+    public Task(@BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category) {
+        this.task = task;
+        this.dueDate = dueDate;
+        this.category = category;
+        this.priority = 1;
+        this.status = "New";
+    }
 
     public Task(@BsonProperty("_id") int id, @BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category) {
         this.id = id;
@@ -111,5 +118,19 @@ public class Task {
     public void setCompleteStatus(){
         this.status = "Complete";
     }
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }
