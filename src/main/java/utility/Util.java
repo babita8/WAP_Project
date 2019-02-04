@@ -6,9 +6,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.model.*;
 import model.Task;
 import model.User;
 import org.bson.Document;
@@ -18,6 +16,8 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class Util {
@@ -92,16 +92,36 @@ public class Util {
 
     //2. insert Task
     public static boolean insertTask(Task inputTask) {
-
+//        System.out.println("B=================================");
+//        System.out.println(inputTask.toString());
+//        System.out.println("E=================================");
         // Get the mongodb collection.
-        MongoCollection taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
 
-    if(inputTask.getId()!=0)
-        taskCollection.insertOne(inputTask);
-    else
-        return false;
+        try {
+            List<Task> ids = new ArrayList<Task>();
+            taskCollection.aggregate(
+                    Arrays.asList(
+                            Aggregates.sort(Sorts.descending("_id")),
+                            Aggregates.limit(1)
+                    )
+            ).into(ids);
+
+            if (ids.size() != 0) {
+                inputTask.setId(ids.get(0).getId() + 1);
+            } else {
+                inputTask.setId(1);
+            }
+            taskCollection.insertOne(inputTask);
+        }
+        catch (Exception ex)
+        {
+            System.out.println("insertTask error");
+            ex.printStackTrace();
+            return false;
+        }
+
         return true;
-
     }
 
     //3. Update Task
@@ -165,7 +185,14 @@ public class Util {
         });
     }
 
-    ;
+    public static void testInsertTask() {
+        Task t = new Task("Mai task Feb 03", "2017-02-03", "Personal");
+        insertTask(t);
+        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+        Collection<Task> result = taskCollection.find(Task.class).into(new ArrayList<Task>());
+
+        result.forEach(System.out::println);
+    }
 
 
     public static void MockDatane() {
@@ -194,6 +221,8 @@ public class Util {
         taskList.forEach((task) -> {
             task.setAssignUser(insertTaskUser.getId());
             task.setCreateUser(insertTaskUser.getId());
+            //task.setPriority(1);
+            //task.setStatus("New");
             insertTask(task);
         });
 
@@ -220,11 +249,11 @@ public class Util {
 
         //testUpdateTask();
 
-        User search = searchUserInDb("account", "account");
-        getTaskList(search.getId());
+//        User search = searchUserInDb("account", "account");
+//        getTaskList(search.getId());
 
 
-
+       // testInsertTask();
 
     }
 
