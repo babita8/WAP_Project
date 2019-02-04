@@ -18,9 +18,13 @@ public class Task {
     private int assignUser;
     @BsonProperty("createUser")
     private int createUser;
+    @BsonProperty("priority")
+    int priority;
+    @BsonProperty("status")
+    String status = "New";
+
 
     public Task(@BsonProperty("_id") int id, @BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category) {
-
         this.id = id;
         this.task = task;
         this.dueDate = dueDate;
@@ -28,7 +32,7 @@ public class Task {
     }
 
     @BsonCreator
-    public Task(@BsonProperty("_id") int id, @BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category, @BsonProperty("assignUser") int assignUser, @BsonProperty("createUser") int createUser) {
+    public Task(@BsonProperty("_id") int id, @BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category, @BsonProperty("assignUser") int assignUser, @BsonProperty("createUser") int createUser, @BsonProperty("priority") int priority, @BsonProperty("status") String status) {
 
         this.id = id;
         this.task = task;
@@ -36,6 +40,9 @@ public class Task {
         this.category = category;
         this.assignUser = assignUser;
         this.createUser = createUser;
+        this.status = status;
+        this.priority = priority;
+
     }
 
     @Override
@@ -47,6 +54,8 @@ public class Task {
                 ", category='" + category + '\'' +
                 ", assignUser=" + assignUser +
                 ", createUser=" + createUser +
+                ", priority=" + priority +
+                ", status='" + status + '\'' +
                 '}';
     }
 
@@ -88,6 +97,7 @@ public class Task {
 
     public void setAssignUser(int assignUser) {
         this.assignUser = assignUser;
+        this.status = "Assigned";
     }
 
     public int getCreateUser() {
@@ -97,4 +107,9 @@ public class Task {
     public void setCreateUser(int createUser) {
         this.createUser = createUser;
     }
+
+    public void setCompleteStatus(){
+        this.status = "Complete";
+    }
+
 }
