@@ -17,6 +17,8 @@ public class MockData {
         taskList.add(new Task("first task", "2017-11-19", "Personal"));
         taskList.add(new Task("second task", "2017-11-23", "Work"));
         taskList.add(new Task("third task", "2017-12-19", "Work"));
+        taskList.add(new Task("Project planning", "2017-02-04", "Work"));
+        taskList.add(new Task("Project layout", "2017-02-10", "Work"));
 
         return taskList;
     }
