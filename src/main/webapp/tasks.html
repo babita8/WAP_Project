@@ -33,6 +33,13 @@
 					<option value="Work">Work</option>
 				</select>
 			</div>
+			<div>
+				<label>Priority</label> <select name="priority">
+				<option value="1">High</option>
+				<option value="2">Mid</option>
+				<option value="3">Low</option>
+			</select>
+			</div>
 			<nav>
 				<a href="#" id="saveTask">Save task</a>    <!-- https://stackoverflow.com/questions/4855168/what-is-href-and-why-is-it-used -->
 				<a href="#" id="clearTask">Clear task</a>
@@ -44,7 +51,8 @@
 			<colgroup>
 				<col width="40%">
 				<col width="15%">
-				<col width="15%">
+				<col width="10%">
+				<col width="5%">
 				<col width="30%">
 			</colgroup>
 			<thead>
@@ -52,6 +60,7 @@
 					<th>Name</th>
 					<th>Due</th>
 					<th>Category</th>
+					<th>Priority</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -95,7 +104,7 @@ if (window.indexedDB) {
 }
 </script>
 
-<script id="taskRow" type="text/x-jQuery-tmpl">
+<script id="taskRow" type="texFt/x-jQuery-tmpl">
 <tr>
 	<td {{if complete == true}}class="taskCompleted"{{/if}}>${task}</td>
 	<td {{if complete == true}}class="taskCompleted"{{/if}}><time datetime="${requiredBy}">${requiredBy}</time></td>

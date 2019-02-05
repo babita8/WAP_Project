@@ -5,6 +5,15 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>tasks.html</welcome-file>
+        <welcome-file>login.html</welcome-file>
     </welcome-file-list>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>controller.LoginServlet</servlet-class>
+        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

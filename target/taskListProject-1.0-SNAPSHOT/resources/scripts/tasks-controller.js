@@ -30,9 +30,7 @@ tasksController = function() {
      */
     function displayTasksServer(data) { //this needs to be bound to the tasksController -- used bind in retrieveTasksServer 111917kl
     	console.log(data);
-        // var guestList = "You need to modify this method to display the updated guest list.  Remember to build the entire list before adding it to the DOM.";
-        // $("#guestList").html(guestList);
-        tasksController.loadServerTasks(data); //will this work??  probably not, need this to be the taskController ****************
+        tasksController.loadServerTasks(data);
     }
 	
 	function taskCountChanged() {
@@ -74,14 +72,11 @@ tasksController = function() {
 					$(taskPage).find('#taskCreation').removeClass('not');
 				});
 
-                /**
-				 * 11/19/17kl
-                 */
+                /**	 * 11/19/17kl        */
                 $(taskPage).find('#btnRetrieveTasks').click(function(evt) {
                     evt.preventDefault();
                     console.log('making ajax call');
                     retrieveTasksServer();
-
                 });
 				
 				$(taskPage).find('#tblTasks tbody').on('click', 'tr', function(evt) {
