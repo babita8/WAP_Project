@@ -5,6 +5,7 @@
          version="3.1">
 
     <welcome-file-list>
+
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
     <servlet>
@@ -16,4 +17,16 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>TaskServlet</servlet-name>
+        <servlet-class>controller.TaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TaskServlet</servlet-name>
+        <url-pattern>/TaskServlet</url-pattern>
+    </servlet-mapping>
+
 </web-app>

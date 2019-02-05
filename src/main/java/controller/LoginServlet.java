@@ -39,7 +39,12 @@ public class LoginServlet extends HttpServlet {
             User userFound = Util.searchUserInDb(param1, param2);
             if(userFound!=null) {
                 req.getSession().setAttribute("user",userFound);
-                req.getRequestDispatcher("/tasks.html").forward(req, resp);
+
+
+
+                resp.setStatus(307); //this makes the redirection keep your requesting method as is.
+                resp.addHeader("Location", "/TaskServlet");
+                //resp.sendRedirect("/taskServlet");
             } else {
                 req.setAttribute("error_message", "You are not an authorised user. Please check with administrator.");
                 req.getRequestDispatcher("/index.jsp").forward(req, resp);
