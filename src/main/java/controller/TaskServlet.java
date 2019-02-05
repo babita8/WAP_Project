@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import model.Task;
 import utility.MockData;
+import utility.Util;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,11 +25,14 @@ public class TaskServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String JSONtasks;
-        List<Task> taskList = new MockData().retrieveTaskList();
+        List<Task> taskList = Util.getTaskList(0);
+        //List<Task> taskList = new MockData().retrieveTaskList();
         JSONtasks = new Gson().toJson(taskList);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
+        System.out.println("Out: "+JSONtasks);
         out.write(JSONtasks);
     }
 }
