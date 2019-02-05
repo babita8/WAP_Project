@@ -1,9 +1,8 @@
 package utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.google.gson.Gson;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
@@ -15,6 +14,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -187,6 +187,51 @@ public class Util {
 
     }
 
+
+    public static ArrayList<Document> getTaskListJson(int assignedUserId) {
+        // View DB data
+        List<Document> taskListDB = new ArrayList<>();
+        getTable("tasklist").find().into(taskListDB);
+
+        List<Document> usersDB = new ArrayList<>();
+        getTable("users").find().into(usersDB);
+        // End of View DB data
+
+        List<Document> result = new ArrayList<>();
+        MongoCollection taskList = getTable("tasklist");
+
+        Document fieldsAs = new Document("from", "users");
+        fieldsAs.put("localField", "assignUser");
+        fieldsAs.put("foreignField", "_id");
+        fieldsAs.put("as", "AssUser");
+        Document lookupAs = new Document("$lookup", fieldsAs);
+
+        Document fieldsCr = new Document("from", "users");
+        fieldsCr.put("localField", "createUser");
+        fieldsCr.put("foreignField", "_id");
+        fieldsCr.put("as", "CrUser");
+        Document lookupCr = new Document("$lookup", fieldsCr);
+
+
+
+        List<Bson> filters = new ArrayList<>();
+        filters.add(lookupAs);
+        filters.add(lookupCr);
+
+
+        Collection<Document> it = taskList.aggregate(filters).into(new ArrayList<Document>());
+
+        return new ArrayList<Document>(it);
+
+    }
+
+
+    public static String tasksUserInfo(int userId)
+    {
+        return "";
+    }
+
+
     /*---------------------------Test Code with void main--------------------------*/
 
 
@@ -245,7 +290,7 @@ public class Util {
     }
 
     public static void main(String[] args) {
-//        System.out.println("Bong Hoa");
+
 //
 //
         //Drop database
@@ -269,6 +314,8 @@ public class Util {
 
 
        // testInsertTask();
+
+
 
     }
 

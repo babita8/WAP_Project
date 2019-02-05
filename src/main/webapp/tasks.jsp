@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -119,7 +120,35 @@
 
             </thead>
             <tbody>
+
             <c:forEach var = "i" items ="${taskList}">
+                <tr>
+                    <td>${i.get("task")}</td>
+                    <td>${i.get("dueDate")}</td>
+                    <td>${i.get("category")}</td>
+                    <td><c:forEach var="no" begin="1" end="${i.get('priority')}">
+                        <span class="fa fa-star checked"></span>
+                    </c:forEach>
+                        <c:forEach var="no" begin="${i.get('priority')}" end="5">
+                            <span class="fa fa-star"></span>
+                        </c:forEach></td>
+                    <td>${i.get("AssUser")[0].get("userName")}</td>
+                    <td>${i.get("CrUser")[0].get("userName")}</td>
+                    <td>${i.get("status")}</td>
+                    <td>
+                        <a href="#" class="editRow" data-task-id="${i.get('id')}">Edit</a>
+                        <a href="#" class="completeRow" data-task-id="${i.get('id')}">Complete</a>
+                        <a href="#" class="deleteRow" data-task-id="${i.get('id')}">Delete</a>
+                    </td>
+
+
+                </tr>
+            </c:forEach>
+
+
+
+
+            <%--<c:forEach var = "i" items ="${taskList}">
                 <tr>
                     <td>${i.task}</td>
                     <td>${i.dueDate}</td>
@@ -143,7 +172,7 @@
                     </td>
 
                 </tr>
-            </c:forEach>
+            </c:forEach>--%>
                 </tbody>
         </table>
         <nav>
@@ -190,7 +219,7 @@
 	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= category}}</td>
 	<%--<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= priority}}</td>--%>
 	<td {{if complete == true}}class="taskCompleted"{{/if}}>
-        {{var abc=priority}}
+        {{var abc= priority}}
         {{var xyz=5- priority}}
         {{each(i) Array.apply(null, {length: abc }).map(Number.call, Number)}}
         <span class="fa fa-star checked"></span>
@@ -199,8 +228,9 @@
             <span class="fa fa-star"></span>
         {{/each}}
     </td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= assignUser}}</td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= createUser}}</td>
+	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= AssUser[0].userName}}
+	</td>
+	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= CrUser[0].userName}}</td>
 	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= status}}</td>
 	<td>
 		<nav>
