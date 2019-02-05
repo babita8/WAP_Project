@@ -76,18 +76,34 @@ public class Util {
 
         // Get the mongodb collection.
         MongoCollection<User> userCollection = getTable("users").withDocumentClass(User.class);
-        //Is username existing?
-        User myDoc = userCollection.find(Filters.eq("userName", inputUser.getUserName())).first();
-        //if No
-        if (myDoc == null) {
-            userCollection.insertOne(inputUser);
-            return true;
+        try {
+            List<User> ids = new ArrayList<User>();
+            userCollection.aggregate(Arrays.asList(
+                    Aggregates.sort(Sorts.descending("_id")),
+                    Aggregates.limit(1)
+            )).into(ids);
 
-        } else {
-            System.out.println(myDoc.toString());
-            System.out.println("User" + inputUser.getUserName() + " already exists");
+            if (ids.size() != 0) inputUser.setId(ids.get(0).getId() + 1);
+            else inputUser.setId(1);
+
+            userCollection.insertOne(inputUser);
+        }
+        catch (Exception ex) {
+            System.out.println("insertUser error");
+            ex.printStackTrace();
             return false;
         }
+
+        return true;
+    }
+
+    public static void testInsertUser() {
+//        User u = new User("maimai", "maimai", "thi.tran@mum.edu", "0908112345", 1, "IT");
+//        insertUser(u);
+        MongoCollection<Task> taskCollection = getTable("users").withDocumentClass(User.class);
+        Collection<User> result = taskCollection.find(User.class).into(new ArrayList<User>());
+
+        result.forEach(System.out::println);
     }
 
     //2. insert Task
@@ -186,23 +202,22 @@ public class Util {
     }
 
     public static void testInsertTask() {
-        Task t = new Task("Mai task Feb 03", "2017-02-03", "Personal");
-        insertTask(t);
+//        Task t = new Task("Mai task Feb 03", "2017-02-03", "Personal");
+//        insertTask(t);
         MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
         Collection<Task> result = taskCollection.find(Task.class).into(new ArrayList<Task>());
 
         result.forEach(System.out::println);
     }
 
-
     public static void MockDatane() {
         //insert data for Users
         ArrayList<User> userList = new ArrayList<>();
 
-        userList.add(new User(1, "account", "account", "account@mum.edu", "016414523688"));
-        userList.add(new User(2, "compro", "compro", "compro@mum.edu", "016414523689"));
-        userList.add(new User(3, "admission", "admission", "admission@mum.edu", "016414523687"));
-        userList.add(new User(4, "marketing", "marketing", "marketing@mum.edu", "016414523680"));
+        userList.add(new User("account", "account", "account@mum.edu", "016414523688", 1, "IT"));
+        userList.add(new User("compro", "compro", "compro@mum.edu", "016414523689", 1, "IT"));
+        userList.add(new User("admission", "admission", "admission@mum.edu", "016414523687", 2, "Sales"));
+        userList.add(new User("marketing", "marketing", "marketing@mum.edu", "016414523680", 2, "Sales"));
 
 
         userList.forEach((user) -> System.out.println(user.getUserName()));
@@ -230,18 +245,18 @@ public class Util {
     }
 
     public static void main(String[] args) {
-        System.out.println("Bong Hoa");
-
-
+//        System.out.println("Bong Hoa");
+//
+//
         //Drop database
-        MongoCollection userCollection = getTable("users");
-        userCollection.deleteMany(new Document());
-
-        MongoCollection taskCollection = getTable("tasklist");
-        taskCollection.deleteMany(new Document());
-
-        //Mockup Data
-        MockDatane();
+//        MongoCollection userCollection = getTable("users");
+//        userCollection.deleteMany(new Document());
+//
+//        MongoCollection taskCollection = getTable("tasklist");
+//        taskCollection.deleteMany(new Document());
+//
+//        //Mockup Data
+//        MockDatane();
 
         //Testing
 

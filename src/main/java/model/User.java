@@ -14,7 +14,10 @@ public class User {
     String email;
     @BsonProperty("phone")
     String phone;
-
+    @BsonProperty("groupId")
+    int groupId;
+    @BsonProperty("group")
+    String group;
 
     public int getId() {
         return id;
@@ -56,13 +59,40 @@ public class User {
         return phone;
     }
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public User(@BsonProperty("userName") String userName, @BsonProperty("passWord") String passWord, @BsonProperty("email") String email, @BsonProperty("phone") String phone, @BsonProperty("groupId") int groupId, @BsonProperty("group") String group) {
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phone = phone;
+        this.groupId = groupId;
+        this.group = group;
+    }
+
     @BsonCreator
-    public User(@BsonProperty("_id") int id, @BsonProperty("userName") String userName, @BsonProperty("passWord") String passWord, @BsonProperty("email") String email, @BsonProperty("phone") String phone) {
+    public User(@BsonProperty("_id") int id, @BsonProperty("userName") String userName, @BsonProperty("passWord") String passWord, @BsonProperty("email") String email, @BsonProperty("phone") String phone, @BsonProperty("groupId") int groupId, @BsonProperty("group") String group) {
         this.id = id;
         this.userName = userName;
         this.passWord = passWord;
         this.email = email;
         this.phone = phone;
+        this.groupId = groupId;
+        this.group = group;
     }
 
     @Override
@@ -73,6 +103,8 @@ public class User {
                 ", passWord='" + passWord + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", groupId=" + groupId +
+                ", group='" + group + '\'' +
                 '}';
     }
 }
