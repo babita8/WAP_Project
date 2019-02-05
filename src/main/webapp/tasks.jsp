@@ -20,6 +20,7 @@
     <script src="resources/scripts/jquery-serialization.js"></script>
     <script src="resources/scripts/tasks-controller.js"></script>
     <script src="resources/scripts/date.js"></script>
+    <script src="resources/scripts/tableSort.js"></script>
     <script src="resources/scripts/jquery.star-rating-svg.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -110,13 +111,13 @@
             </colgroup>
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Due</th>
-                <th>Category</th>
-                <th>Priority</th>
-                <th>Assign To</th>
-                <th>Created By</th>
-                <th>Status</th>
+                <th class="sortStyle">Name</th>
+                <th class="sortStyle">Due</th>
+                <th class="sortStyle">Category</th>
+                <th class="sortStyle">Priority</th>
+                <th class="sortStyle">Assign To</th>
+                <th class="sortStyle">Created By</th>
+                <th class="sortStyle">Status</th>
                 <th>Actions</th>
             </tr>
 
