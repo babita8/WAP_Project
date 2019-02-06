@@ -37,13 +37,13 @@ $(function() {
     }
 
     function getSortableTableHeaders(table) {
-        return getTableHeaders(table).filter(function(index){
+        return getTableHeaders(table).filter(function(){
             return $(this).hasClass(config.styles[SORT]);
         });
     }
 
     function changeOrder(table, column) {
-        var sortedHeader = getTableHeaders(table).filter(function(index) {
+        var sortedHeader = getTableHeaders(table).filter(function() {
             return $(this).hasClass(config.styles[ASC]) || $(this).hasClass(config.styles[DESC]);
         });
 
@@ -90,10 +90,7 @@ $(function() {
         });
     }
 
-    $('#tblTasks').each(function(userConfig) {
-        // Create and save table sort configuration
-        $.extend(config, userConfig);
-
+    $('#tblTasks').each(function() {
         var selTbl = this;
         // Add click listener to the header
         getSortableTableHeaders(selTbl).each(function(j, th) {
