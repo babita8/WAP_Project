@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         // Checking for null and empty values
         if(param1 == null || param2 == null || "".equals(param1) || "".equals(param2)) {
             req.setAttribute("error_message", "Please enter login id and password");
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
         } else {
             User userFound = Util.searchUserInDb(param1, param2);
             if(userFound!=null) {
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
                 //resp.sendRedirect("/taskServlet");
             } else {
                 req.setAttribute("error_message", "You are not an authorised user. Please check with administrator.");
-                req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                req.getRequestDispatcher("/login.jsp").forward(req, resp);
             }
         }
     }

@@ -13,14 +13,13 @@ tasksController = function() {
 	 * currently just testing this and writing return value out to console
 	 * 111917kl
      */
-	function retrieveTasksServer() {
+	function retrieveTasksServer(selUserId) {
         $.ajax("TaskServlet", {
             "type": "get",
-			dataType: "json"
-            // "data": {
-            //     "first": first,
-            //     "last": last
-            // }
+			dataType: "json",
+            "data": {
+                "selUserId": selUserId
+            }
         }).done(displayTasksServer.bind()); //need reference to the tasksController object
     }
 
@@ -76,10 +75,10 @@ tasksController = function() {
 				});
 
                 /**	 * 11/19/17kl        */
-                $(taskPage).find('#btnRetrieveTasks').click(function(evt) {
+                $(taskPage).find('#btnRetrieveTasks').change(function(evt) {
                     evt.preventDefault();
                     console.log('making ajax call');
-                    retrieveTasksServer();
+                    retrieveTasksServer(this.value);
                 });
 				
 				$(taskPage).find('#tblTasks tbody').on('click', 'tr', function(evt) {

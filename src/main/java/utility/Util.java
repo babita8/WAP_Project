@@ -3,6 +3,7 @@ package utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mongodb.*;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static com.mongodb.client.model.Projections.*;
 
 public class Util {
 
@@ -82,6 +85,51 @@ public class Util {
         return result;
     }
 
+    // Update User
+    public static boolean upsertUser(User myUpdate) {
+
+        try {
+            MongoCollection<Document> userCollection = getTable("users");
+            // findOneAndUpdate using JSON into MongoDB
+            System.out.println(myUpdate);
+
+            //generate max number for User id from DB
+            /*if(myUpdate.getId()==0) {
+                List<Document> ids = new ArrayList<Document>();
+
+
+                userCollection.aggregate(Arrays.asList(
+                        Aggregates.sort(Sorts.descending("_id")),
+                        Aggregates.limit(1)
+                )).into(ids);
+
+                System.out.println(ids.get(0));
+
+               // if (ids.size() != 0) myUpdate.setId(ids.get(0).getId() + 1);
+               // else myUpdate.setId(1);
+            }*/
+
+            //end
+
+            ObjectMapper mapper = new ObjectMapper();
+            BasicDBObject query = new BasicDBObject();
+            query.append("_id", myUpdate.getId());
+            String jsonString = mapper.writeValueAsString(myUpdate);
+            BasicDBObject doc = BasicDBObject.parse(jsonString);
+            Bson newDocument = new Document("$set", doc);
+
+
+            Document resultDocument = userCollection.findOneAndUpdate(query,
+                    newDocument, (new FindOneAndUpdateOptions()).upsert(true).returnDocument(ReturnDocument.AFTER));
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
     //1. insert User
     public static boolean insertUser(User inputUser) {
@@ -172,25 +220,60 @@ public class Util {
     }
 
 
-    public static ArrayList<Task> getTaskList(int assignedUserId) {
-        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+    // Deprecated method
+    //4. insert User
+//    public static ArrayList<Task> getTaskList(int assignedUserId) {
+//        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+//
+//        ArrayList<Task> result = null;
+//        if (assignedUserId == 0) {
+//            System.out.println("Search All");
+//            result = taskCollection.find(Task.class).into(new ArrayList<Task>());
+//        } else {
+//
+//            System.out.println("Search by Condition");
+//            result = taskCollection.find(Filters.eq("assignUser", assignedUserId), Task.class).into(new ArrayList<Task>());
+//        }
+//
+//        result.forEach(System.out::println);
+//        return result;
+//
+//
+//    }
 
-        ArrayList<Task> result = null;
-        if (assignedUserId == 0) {
-            System.out.println("Search All");
-            result = taskCollection.find(Task.class).into(new ArrayList<Task>());
-        } else {
+    public static Document getGroupofUser(int userId) {
+        MongoCollection<Document> userCol = getTable("users");
 
-            System.out.println("Search by Condition");
-            result = taskCollection.find(Filters.eq("assignUser", assignedUserId), Task.class).into(new ArrayList<Task>());
-        }
+        Document res = userCol.find(Filters.eq("_id", userId))
+                                .projection(fields(include("groupId", "group"), exclude("_id")))
+                                .first();
+        System.out.println("**************************************");
+        System.out.println("getGroupofUser result: " + res);
 
-        result.forEach(System.out::println);
-        return result;
-
-
+        return res;
     }
 
+    public static ArrayList<Document> getUserList(int groupId) {
+        MongoCollection<Document> userCol = getTable("users");
+        ArrayList<Document> res = new ArrayList<>();
+        if(groupId > 0)
+            userCol.find(Filters.eq("groupId", groupId))
+                    .projection(fields(include("_id", "userName"))).into(res);
+        else
+            userCol.find()
+                    .projection(fields(include("_id", "userName"))).into(res);
+
+        return res;
+    }
+
+    public static ArrayList<Document> getTaskListByGroup(int groupId) {
+        ArrayList<Document> res = new ArrayList<>();
+        MongoCollection<Document> taskCol = getTable("tasklist");
+
+        getUserList(groupId).forEach(e -> res.addAll(getTaskListJson((int)e.get("_id"))));
+
+        return res;
+    }
 
 
 
@@ -220,12 +303,14 @@ public class Util {
         fieldsCr.put("as", "CrUser");
         Document lookupCr = new Document("$lookup", fieldsCr);
 
-
-
         List<Bson> filters = new ArrayList<>();
         filters.add(lookupAs);
         filters.add(lookupCr);
 
+        if(assignedUserId > 0) {
+            Document con = new Document("assignUser", assignedUserId);
+            filters.add(new Document("$match", con));
+        }
 
         Collection<Document> it = taskList.aggregate(filters).into(new ArrayList<Document>());
 
@@ -250,6 +335,8 @@ public class Util {
         Collection<User> result = taskCollection.find(User.class).into(new ArrayList<User>());
 
         result.forEach(System.out::println);
+
+
     }
 
 
