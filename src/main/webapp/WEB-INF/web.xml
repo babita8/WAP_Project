@@ -32,13 +32,13 @@
 
 
     <servlet>
-        <servlet-name>InsertTaskServlet</servlet-name>
-        <servlet-class>controller.InsertTaskServlet</servlet-class>
+        <servlet-name>DeleteTaskServlet</servlet-name>
+        <servlet-class>controller.DeleteTaskServlet</servlet-class>
 
     </servlet>
     <servlet-mapping>
-        <servlet-name>InsertTaskServlet</servlet-name>
-        <url-pattern>/InsertTaskServlet</url-pattern>
+        <servlet-name>DeleteTaskServlet</servlet-name>
+        <url-pattern>/DeleteTaskServlet</url-pattern>
     </servlet-mapping>
 
 
