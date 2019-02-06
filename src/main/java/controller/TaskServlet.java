@@ -38,7 +38,7 @@ public class TaskServlet extends HttpServlet {
         request.getSession().setAttribute("userInGroup", userInGroup);
 
         //request.getRequestDispatcher("tasks.jsp").forward(request, response);
-        response.sendRedirect("tasksEdit.jsp");
+        response.sendRedirect("tasks.jsp");
 
 
     }
