@@ -8,6 +8,7 @@
 
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
+
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.LoginServlet</servlet-class>
@@ -40,6 +41,17 @@
         <url-pattern>/InsertTaskServlet</url-pattern>
     </servlet-mapping>
 
+
+
+    <servlet>
+        <servlet-name>EditTaskServlet</servlet-name>
+        <servlet-class>controller.EditTaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditTaskServlet</servlet-name>
+        <url-pattern>/EditTaskServlet</url-pattern>
+    </servlet-mapping>
 
 
 </web-app>
