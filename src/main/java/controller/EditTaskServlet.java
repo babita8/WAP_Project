@@ -1,5 +1,7 @@
 package controller;
 
+import com.google.gson.Gson;
+import model.Task;
 import model.User;
 import utility.Util;
 
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 //@WebServlet(name = "/EditTaskServlet")
 public class EditTaskServlet extends HttpServlet {
@@ -31,16 +34,33 @@ public class EditTaskServlet extends HttpServlet {
                 taskCategory = req.getParameter("taskCategory"),
                 taskPriority = req.getParameter("taskPriority"),
                 taskAssigned = req.getParameter("taskAssigned"),
-                edit = req.getParameter("edit"),
+                edit = req.getParameter("editOrInsert"),
                 taskId = req.getParameter("taskId");
 
 
         // Checking for null and empty values
 
-        if (edit.equals("0")) {
+        if (edit.equals("insert")) {
             //todo insert
-            System.out.println("Insert " + taskName + " " + taskDate + " " + taskCategory + " "
-                    + taskPriority + " " + taskAssigned + " " + taskId);
+
+            System.out.println("POST from EditTaskServlet With AJAX Insert");
+            int assignUser = Integer.parseInt(req.getParameter("assigned"));
+            String category = req.getParameter("category");
+            int createUser = Integer.parseInt(req.getParameter("myhidCreate"));
+            String dueDate = req.getParameter("requiredBy");
+            int priority = Integer.parseInt(req.getParameter("star"));
+            String task = req.getParameter("task");
+            Task insertTask = new Task(task, dueDate, category, priority, assignUser, createUser);
+
+            Util.insertTask(insertTask);
+
+            PrintWriter out = resp.getWriter();
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            String JSONtasks = new Gson().toJson(Util.getTaskListJson(0));
+            System.out.println("Out Insert Task: " + JSONtasks);
+            out.write(JSONtasks);
+
         } else {
             //todo edit
             System.out.println("Edit " + taskName + " " + taskDate + " " + taskCategory + " "

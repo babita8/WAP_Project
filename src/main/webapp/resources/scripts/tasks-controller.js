@@ -129,7 +129,7 @@ tasksController = function() {
 							$(taskPage).find('#taskCreation').addClass('not');
 						}, errorLogger);
 
-						$.ajax("/InsertTaskServlet", {
+						$.ajax("/EditTaskServlet", {
 							"type": "POST",
 							 data: task
 						}).done(displayTasksServer.bind());

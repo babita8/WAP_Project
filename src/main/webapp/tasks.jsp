@@ -90,6 +90,7 @@
 
             <input type="hidden" name="myhidCreate" value="${user.id}"/>
             <input type="hidden" id="myhidStars" name="star" value="${user.id}"/>
+            <input type="hidden" name="editOrInsert" value="insert"/>
 
             <nav>
                 <a href="#" id="saveTask">Save task</a>    <!-- https://stackoverflow.com/questions/4855168/what-is-href-and-why-is-it-used -->
@@ -129,23 +130,23 @@
                     <td>${i.get("task")}</td>
                     <td>${i.get("dueDate")}</td>
                     <td>${i.get("category")}</td>
-                    <td><c:forEach var="no" begin="1" end="${i.get('priority')}">
-                        <span class="fa fa-star checked"></span>
-                    </c:forEach>
+                    <td>
+                        <c:forEach var="no" begin="1" end="${i.get('priority')}">
+                             <span class="fa fa-star checked"></span>
+                        </c:forEach>
                         <c:forEach var="no" begin="${i.get('priority')}" end="5">
-                            <span class="fa fa-star"></span>
-                        </c:forEach></td>
+                             <span class="fa fa-star"></span>
+                        </c:forEach>
+                    </td>
                     <td>${i.get("AssUser")[0].get("userName")}</td>
                     <td>${i.get("CrUser")[0].get("userName")}</td>
                     <td>${i.get("status")}</td>
                     <td>
-                        <a href="#" class="editRow" data-task-id="${i.get('id')}">Edit</a>
-                        <a href="#" class="completeRow" data-task-id="${i.get('id')}">Complete</a>
-                        <a href="#" class="deleteRow" data-task-id="${i.get('id')}">Delete</a>
+                        <a href="#" class="editRow" data-task-id="${i.get('_id')}">Edit</a>
+                        <a href="#" class="completeRow" data-task-id="${i.get('_id')}">Complete</a>
+                        <a href="#" class="deleteRow" data-task-id="${i.get('_id')}">Delete</a>
                     </td>
-
-
-                </tr>
+               </tr>
             </c:forEach>
 
 
@@ -238,10 +239,10 @@
 	<td>
 		<nav>
 			{{if complete != true}}
-				<a href="#" class="editRow" data-task-id="{{= id}}">Edit</a>
-				<a href="#" class="completeRow" data-task-id="{{= id}}">Complete</a>
+				<a href="#" class="editRow" data-task-id="{{= _id}}">Edit</a>
+				<a href="#" class="completeRow" data-task-id="{{= _id}}">Complete</a>
 			{{/if}}
-			<a href="#" class="deleteRow" data-task-id="{{= id}}">Delete</a>
+			<a href="#" class="deleteRow" data-task-id="{{= _id}}">Delete</a>
 		</nav>
 	</td>
 </tr>
