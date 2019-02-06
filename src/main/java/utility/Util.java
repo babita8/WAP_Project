@@ -85,6 +85,51 @@ public class Util {
         return result;
     }
 
+    // Update User
+    public static boolean upsertUser(User myUpdate) {
+
+        try {
+            MongoCollection<Document> userCollection = getTable("users");
+            // findOneAndUpdate using JSON into MongoDB
+            System.out.println(myUpdate);
+
+            //generate max number for User id from DB
+            /*if(myUpdate.getId()==0) {
+                List<Document> ids = new ArrayList<Document>();
+
+
+                userCollection.aggregate(Arrays.asList(
+                        Aggregates.sort(Sorts.descending("_id")),
+                        Aggregates.limit(1)
+                )).into(ids);
+
+                System.out.println(ids.get(0));
+
+               // if (ids.size() != 0) myUpdate.setId(ids.get(0).getId() + 1);
+               // else myUpdate.setId(1);
+            }*/
+
+            //end
+
+            ObjectMapper mapper = new ObjectMapper();
+            BasicDBObject query = new BasicDBObject();
+            query.append("_id", myUpdate.getId());
+            String jsonString = mapper.writeValueAsString(myUpdate);
+            BasicDBObject doc = BasicDBObject.parse(jsonString);
+            Bson newDocument = new Document("$set", doc);
+
+
+            Document resultDocument = userCollection.findOneAndUpdate(query,
+                    newDocument, (new FindOneAndUpdateOptions()).upsert(true).returnDocument(ReturnDocument.AFTER));
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
     //1. insert User
     public static boolean insertUser(User inputUser) {
@@ -290,6 +335,8 @@ public class Util {
         Collection<User> result = taskCollection.find(User.class).into(new ArrayList<User>());
 
         result.forEach(System.out::println);
+
+
     }
 
 

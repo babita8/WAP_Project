@@ -23,14 +23,67 @@
     <script src="resources/scripts/tableSort.js"></script>
     <script src="resources/scripts/jquery.star-rating-svg.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
         .checked {
             color: orange;
         }
     </style>
 
+    <script src="resources/scripts/user_profile.js"></script>
+
 </head>
 <body>
+<div>
+    <button id="btn_profile" class="btn btn-sm btn-info">View Profile</button>
+    <div id="user_profile" class="form-horizontal">
+        <div class="form-group">
+            <label for="user_id" class="control-label col-xs-2">User ID:</label>
+            <div class="col-xs-5">
+                <input type="text" class="form-control form-control-sm" id="user_id" value="${user.id}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_group_id" class="control-label col-xs-2">User Group ID:</label>
+            <div class="col-xs-5">
+                <input type="text" class="form-control form-control-sm" id="user_group_id" value="${user.groupId}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_group" class="control-label col-xs-2">User Group:</label>
+            <div class="col-xs-5">
+                <input type="text" class="form-control form-control-sm" id="user_group" value="${user.group}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_name" class="control-label col-xs-2">User Name:</label>
+            <div class="col-xs-5">
+                <input type="text" class="editable form-control form-control-sm" id="user_name" value="${user.userName}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_pass" class="control-label col-xs-2">Password:</label>
+            <div class="col-xs-5">
+                <input type="text" class="editable form-control form-control-sm" id="user_pass" value="${user.passWord}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_email" class="control-label col-xs-2">User Email:</label>
+            <div class="col-xs-5">
+                <input type="text" class="editable form-control form-control-sm" id="user_email" value="${user.email}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_phone" class="control-label col-xs-2">User Phone:</label>
+            <div class="col-xs-5">
+                <input type="text" class="editable form-control form-control-sm" id="user_phone" value="${user.phone}" >
+            </div>
+        </div>
+        <button id="btn_edit" class="btn btn-sm btn-primary">Edit</button>
+        <button id="btn_save" class="btn btn-sm btn-primary">Save</button>
+    </div>
+    <div id="msg_bar" class="alert alert-success"></div>
+</div>
 <header>
     <span>Task list</span>
 </header>
