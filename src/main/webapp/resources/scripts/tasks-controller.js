@@ -120,13 +120,20 @@ tasksController = function() {
 				$(taskPage).find('#saveTask').click(function(evt) {
 					evt.preventDefault();
 					if ($(taskPage).find('form').valid()) {
-						var task = $(taskPage).find('form').toObject();		
+						var task = $(taskPage).find('form').toObject();
+						console.log(task);
 						storageEngine.save('task', task, function() {
 							$(taskPage).find('#tblTasks tbody').empty();
 							tasksController.loadTasks();
 							clearTask();
 							$(taskPage).find('#taskCreation').addClass('not');
 						}, errorLogger);
+
+						$.ajax("/InsertTaskServlet", {
+							"type": "POST",
+							 data: task
+						}).done(displayTasksServer.bind());
+
 					}
 				});
 				initialised = true;

@@ -45,7 +45,7 @@ public class TaskServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("GET!!");
+        System.out.println("GET!! FOR AJAX CALL");
         PrintWriter out = response.getWriter();
 
         String JSONtasks = new Gson().toJson(Util.getTaskListJson(0));

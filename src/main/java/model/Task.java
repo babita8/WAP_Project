@@ -23,12 +23,26 @@ public class Task {
     @BsonProperty("status")
     String status;
 
-    public Task(@BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category) {
+    public Task(String task, String dueDate, String category) {
         this.task = task;
         this.dueDate = dueDate;
         this.category = category;
         this.priority = 1;
         this.status = "New";
+    }
+
+
+    public Task(String task, String dueDate, String category, int priority, int assignUser, int createUser) {
+        this.task = task;
+        this.dueDate = dueDate;
+        this.category = category;
+        this.priority = priority;
+        this.assignUser = assignUser;
+        this.createUser = createUser;
+        if(assignUser==createUser)
+            this.status = "New";
+        else
+            this.status = "Assigned";
     }
 
     public Task(@BsonProperty("_id") int id, @BsonProperty("task") String task, @BsonProperty("dueDate") String dueDate, @BsonProperty("category") String category) {

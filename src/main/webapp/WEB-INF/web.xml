@@ -29,4 +29,17 @@
         <url-pattern>/TaskServlet</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>InsertTaskServlet</servlet-name>
+        <servlet-class>controller.InsertTaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InsertTaskServlet</servlet-name>
+        <url-pattern>/InsertTaskServlet</url-pattern>
+    </servlet-mapping>
+
+
+
 </web-app>
