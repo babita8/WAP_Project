@@ -5,6 +5,53 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>tasks.html</welcome-file>
+
+        <welcome-file>login.html</welcome-file>
     </welcome-file-list>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>controller.LoginServlet</servlet-class>
+        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>TaskServlet</servlet-name>
+        <servlet-class>controller.TaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TaskServlet</servlet-name>
+        <url-pattern>/TaskServlet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>InsertTaskServlet</servlet-name>
+        <servlet-class>controller.InsertTaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InsertTaskServlet</servlet-name>
+        <url-pattern>/InsertTaskServlet</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>EditTaskServlet</servlet-name>
+        <servlet-class>controller.EditTaskServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditTaskServlet</servlet-name>
+        <url-pattern>/EditTaskServlet</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>

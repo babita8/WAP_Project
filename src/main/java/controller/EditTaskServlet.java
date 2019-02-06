@@ -30,25 +30,27 @@ public class EditTaskServlet extends HttpServlet {
 
         // Reading post parameters from the request
         String taskName = req.getParameter("taskName"),
-                taskDate = req.getParameter("taskDate"),
+                taskDate = req.getParameter("dueDate"),
                 taskCategory = req.getParameter("taskCategory"),
                 taskPriority = req.getParameter("taskPriority"),
                 taskAssigned = req.getParameter("taskAssigned"),
                 edit = req.getParameter("editOrInsert"),
-                taskId = req.getParameter("taskId");
+                taskId = req.getParameter("_id");
+        System.out.println("task ID" + taskId);
 
 
         // Checking for null and empty values
 
-        if (edit.equals("insert")) {
+        if (taskId == null) {
             //todo insert
 
             System.out.println("POST from EditTaskServlet With AJAX Insert");
             int assignUser = Integer.parseInt(req.getParameter("assigned"));
             String category = req.getParameter("category");
             int createUser = Integer.parseInt(req.getParameter("myhidCreate"));
-            String dueDate = req.getParameter("requiredBy");
+            String dueDate = req.getParameter("dueDate");
             int priority = Integer.parseInt(req.getParameter("star"));
+
             String task = req.getParameter("task");
             Task insertTask = new Task(task, dueDate, category, priority, assignUser, createUser);
 
@@ -63,8 +65,29 @@ public class EditTaskServlet extends HttpServlet {
 
         } else {
             //todo edit
-            System.out.println("Edit " + taskName + " " + taskDate + " " + taskCategory + " "
-                    + taskPriority + " " + taskAssigned + " " + taskId);
+//            System.out.println("Edit " + taskName + " " + taskDate + " " + taskCategory + " "
+//                    + taskPriority + " " + taskAssigned + " " + taskId);
+
+            System.out.println("POST from EditTaskServlet With AJAX Edit");
+            int assignUser = Integer.parseInt(req.getParameter("assigned"));
+            String category = req.getParameter("category");
+            int createUser = Integer.parseInt(req.getParameter("myhidCreate"));
+            String dueDate = req.getParameter("dueDate");
+           int priority = Integer.parseInt(req.getParameter("star"));
+
+            String task = req.getParameter("task");
+            int id = Integer.parseInt(req.getParameter("_id"));
+            Task insertTask = new Task(id, task, dueDate, category, priority, assignUser, createUser);
+
+            Util.updateTask(insertTask);
+
+            PrintWriter out = resp.getWriter();
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            String JSONtasks = new Gson().toJson(Util.getTaskListJson(0));
+            System.out.println("Out Insert Task: " + JSONtasks);
+            out.write(JSONtasks);
+
 
         }
 
