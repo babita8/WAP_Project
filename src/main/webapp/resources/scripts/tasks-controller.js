@@ -6,6 +6,7 @@ tasksController = function() {
 	
 	var taskPage;
 	var initialised = false;
+	var taskListEdit = null;
 
     /**
 	 * makes json call to server to get task list.
@@ -28,8 +29,10 @@ tasksController = function() {
 	 * callback for retrieveTasksServer
      * @param data
      */
+
     function displayTasksServer(data) { //this needs to be bound to the tasksController -- used bind in retrieveTasksServer 111917kl
     	console.log(data);
+
         tasksController.loadServerTasks(data);
     }
 	
@@ -81,34 +84,57 @@ tasksController = function() {
 				
 				$(taskPage).find('#tblTasks tbody').on('click', 'tr', function(evt) {
 					$(evt.target).closest('td').siblings().andSelf().toggleClass('rowHighlight');
-				});	
-				
-				$(taskPage).find('#tblTasks tbody').on('click', '.deleteRow', 
-					function(evt) { 					
-						storageEngine.delete('task', $(evt.target).data().taskId, 
+				});
+
+				$(taskPage).find('#tblTasks tbody').on('click', '.deleteRow',
+					function(evt) {
+						storageEngine.delete('task', $(evt.target).data().taskId,
 							function() {
-								$(evt.target).parents('tr').remove(); 
+								$(evt.target).parents('tr').remove();
 								taskCountChanged();
 							}, errorLogger);
-						
+
 					}
 				);
 				
 				$(taskPage).find('#tblTasks tbody').on('click', '.editRow', 
 					function(evt) {
 
+
 					var taskId = $(evt.target).data().taskId;
 
-						console.log("Edit task id:");
-					console.log(taskId);
-
+					console.log("Edit task id:");
+					console.log( taskId);
 					$("#taskForm #taskEditId").val(taskId);
+					console.log(taskListEdit);
+
+					var editTask = null;
+					$.each(taskListEdit, function (index, task) {
+
+
+						if (task._id === taskId) {
+							console.log("correct ID:" + task._id);
+							console.log("Task List Edit");
+							console.log(task);
+							editTask = task;
+						}else{
+							console.log("Incorrect ID:" + task.id + " " +taskId );
+
+						}
+
+					});
+
 
 					$(taskPage).find('#taskCreation').removeClass('not');
-						storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
-							$(taskPage).find('form').fromObject(task);
-						}, errorLogger);
+					$(taskPage).find('form').fromObject(editTask);
+
+
+					//$(taskPage).find('form').fromObject(task);
+					// 	storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
+					// 		$(taskPage).find('form').fromObject(task);
+					// 	}, errorLogger);
 					}
+
 				);
 				
 				$(taskPage).find('#clearTask').click(function(evt) {
@@ -153,6 +179,8 @@ tasksController = function() {
          */
 		loadServerTasks: function(tasks) {
             $(taskPage).find('#tblTasks tbody').empty();
+
+			taskListEdit =tasks;
             $.each(tasks, function (index, task) {
                 if (!task.complete) {
                     task.complete = false;

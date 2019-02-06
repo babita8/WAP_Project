@@ -39,14 +39,14 @@
 <main  id="taskPage">
     <section id="taskCreation" class="not">
         <form id="taskForm">
-            <input type="hidden" id="taskEditId" name="id"/>
+
             <div>
                 <label>Task</label> <input type="text" required="required"
                                            name="task" class="large" placeholder="Breakfast at Tiffanys" maxlength="200"  />
             </div>
             <div>
                 <label>Required by</label> <input type="date" required="required"
-                                                  name="requiredBy" />
+                                                  name="dueDate" />
             </div>
             <div>
                 <label>Category</label> <select name="category">
@@ -91,7 +91,7 @@
             <input type="hidden" name="myhidCreate" value="${user.id}"/>
             <input type="hidden" id="myhidStars" name="star" value="${user.id}"/>
             <input type="hidden" name="editOrInsert" value="insert"/>
-
+            <input type="hidden" name="_id" id="taskEditId" value="${task.id}" />
             <nav>
                 <a href="#" id="saveTask">Save task</a>    <!-- https://stackoverflow.com/questions/4855168/what-is-href-and-why-is-it-used -->
                 <a href="#" id="clearTask">Clear task</a>
