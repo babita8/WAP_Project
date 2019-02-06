@@ -3,6 +3,7 @@ package utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mongodb.*;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static com.mongodb.client.model.Projections.*;
 
 public class Util {
 
@@ -167,26 +170,60 @@ public class Util {
 
     }
 
+    // Deprecated method
     //4. insert User
-    public static ArrayList<Task> getTaskList(int assignedUserId) {
-        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+//    public static ArrayList<Task> getTaskList(int assignedUserId) {
+//        MongoCollection<Task> taskCollection = getTable("tasklist").withDocumentClass(Task.class);
+//
+//        ArrayList<Task> result = null;
+//        if (assignedUserId == 0) {
+//            System.out.println("Search All");
+//            result = taskCollection.find(Task.class).into(new ArrayList<Task>());
+//        } else {
+//
+//            System.out.println("Search by Condition");
+//            result = taskCollection.find(Filters.eq("assignUser", assignedUserId), Task.class).into(new ArrayList<Task>());
+//        }
+//
+//        result.forEach(System.out::println);
+//        return result;
+//
+//
+//    }
 
-        ArrayList<Task> result = null;
-        if (assignedUserId == 0) {
-            System.out.println("Search All");
-            result = taskCollection.find(Task.class).into(new ArrayList<Task>());
-        } else {
+    public static Document getGroupofUser(int userId) {
+        MongoCollection<Document> userCol = getTable("users");
 
-            System.out.println("Search by Condition");
-            result = taskCollection.find(Filters.eq("assignUser", assignedUserId), Task.class).into(new ArrayList<Task>());
-        }
+        Document res = userCol.find(Filters.eq("_id", userId))
+                                .projection(fields(include("groupId", "group"), exclude("_id")))
+                                .first();
+        System.out.println("**************************************");
+        System.out.println("getGroupofUser result: " + res);
 
-        result.forEach(System.out::println);
-        return result;
-
-
+        return res;
     }
 
+    public static ArrayList<Document> getUserList(int groupId) {
+        MongoCollection<Document> userCol = getTable("users");
+        ArrayList<Document> res = new ArrayList<>();
+        if(groupId > 0)
+            userCol.find(Filters.eq("groupId", groupId))
+                    .projection(fields(include("_id", "userName"))).into(res);
+        else
+            userCol.find()
+                    .projection(fields(include("_id", "userName"))).into(res);
+
+        return res;
+    }
+
+    public static ArrayList<Document> getTaskListByGroup(int groupId) {
+        ArrayList<Document> res = new ArrayList<>();
+        MongoCollection<Document> taskCol = getTable("tasklist");
+
+        getUserList(groupId).forEach(e -> res.addAll(getTaskListJson((int)e.get("_id"))));
+
+        return res;
+    }
 
     public static ArrayList<Document> getTaskListJson(int assignedUserId) {
         // View DB data
@@ -212,12 +249,14 @@ public class Util {
         fieldsCr.put("as", "CrUser");
         Document lookupCr = new Document("$lookup", fieldsCr);
 
-
-
         List<Bson> filters = new ArrayList<>();
         filters.add(lookupAs);
         filters.add(lookupCr);
 
+        if(assignedUserId > 0) {
+            Document con = new Document("assignUser", assignedUserId);
+            filters.add(new Document("$match", con));
+        }
 
         Collection<Document> it = taskList.aggregate(filters).into(new ArrayList<Document>());
 
@@ -314,9 +353,9 @@ public class Util {
 
 
        // testInsertTask();
-
-
-
+//       getUserList(1).forEach(System.out::println);
+//       getTaskListByGroup(1).forEach(System.out::println);
+//        getGroupofUser(4);
     }
 
 }

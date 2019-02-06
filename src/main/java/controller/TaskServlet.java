@@ -27,12 +27,15 @@ public class TaskServlet extends HttpServlet {
         ArrayList<User> userInGroup = new ArrayList<User>(1);
         userInGroup.add(loginUser);
 
+        // Load task list of all members of group which logged in user belongs to
+        Document group = Util.getGroupofUser(loginUser.getId());
+        List<Document> taskList = Util.getTaskListByGroup((int)group.get("groupId"));
 
-        //List<Task> taskList = Util.getTaskList(loginUser.getId());
+        // Load all members of group which logged in user belongs to
+        List<Document> groupMembers = Util.getUserList((int)group.get("groupId"));
 
-        List<Document> taskList = Util.getTaskListJson(0);
-
-
+        request.getSession().setAttribute("groupMembers", groupMembers);
+        request.getSession().setAttribute("group", group);
         request.getSession().setAttribute("taskList", taskList);
 
         request.getSession().setAttribute("userInGroup", userInGroup);
@@ -48,7 +51,14 @@ public class TaskServlet extends HttpServlet {
         System.out.println("GET!! FOR AJAX CALL");
         PrintWriter out = response.getWriter();
 
-        String JSONtasks = new Gson().toJson(Util.getTaskListJson(0));
+        int selUserId = Integer.parseInt(request.getParameter("selUserId"));
+        String JSONtasks;
+        if(selUserId > 0)
+            JSONtasks = new Gson().toJson(Util.getTaskListJson(selUserId));
+        else {
+            Document group = (Document)request.getSession().getAttribute("group");
+            JSONtasks = new Gson().toJson(Util.getTaskListByGroup((int)group.get("groupId")));
+        }
         //List<Task> taskList = new MockData().retrieveTaskList();
 
         response.setContentType("application/json");

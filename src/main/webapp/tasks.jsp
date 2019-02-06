@@ -180,7 +180,13 @@
         </table>
         <nav>
             <a href="#" id="btnAddTask">Add task</a>
-            <a href="#" id="btnRetrieveTasks">Retrieve tasks from server</a>
+            <%--<a href="#" id="btnRetrieveTasks">Retrieve tasks by user</a>--%>
+            <select id="btnRetrieveTasks">
+                <option value="0">${group.get("group")} Group</option>
+                <c:forEach var="e" items="${groupMembers}">
+                    <option value="${e.get("_id")}">${e.get("userName")}</option>
+                </c:forEach>
+            </select>
         </nav>
     </section>
 </main>
