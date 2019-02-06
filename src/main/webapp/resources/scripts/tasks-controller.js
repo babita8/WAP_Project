@@ -224,6 +224,8 @@ $(document).ready(function(){
 		}
 		responseMessage(msg);
 
+		$("#myhidStars").val(ratingValue);
+
 	});
 
 
