@@ -22,7 +22,7 @@ import java.util.List;
 public class TaskServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("POST!!");
+        System.out.println("POST TaskServlet");
         User loginUser = (User) request.getSession().getAttribute("user");
         ArrayList<User> userInGroup = new ArrayList<User>(1);
         userInGroup.add(loginUser);
@@ -38,7 +38,7 @@ public class TaskServlet extends HttpServlet {
         request.getSession().setAttribute("userInGroup", userInGroup);
 
         //request.getRequestDispatcher("tasks.jsp").forward(request, response);
-        response.sendRedirect("tasksEdit.jsp");
+        response.sendRedirect("tasks.jsp");
 
 
     }
