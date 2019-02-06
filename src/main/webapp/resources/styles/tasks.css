@@ -167,3 +167,26 @@ label.error {
 .rating-stars ul > li.star.selected > i.fa {
 	color:#FF912C;
 }
+
+/* Begin of table sorting style */
+.sortStyle { cursor: pointer; }
+
+.ascStyle {
+	background-image: url(img/asc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+.descStyle {
+	background-image: url(img/desc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+.unsortStyle {
+	background-image: url(img/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+/* End of table sorting style */
