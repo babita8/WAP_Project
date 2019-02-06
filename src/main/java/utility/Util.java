@@ -7,6 +7,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
+import model.Group;
 import model.Task;
 import model.User;
 import org.bson.Document;
@@ -74,6 +75,17 @@ public class Util {
 
     }
 
+    //list of Group
+    public static ArrayList<Group> getAllGroups()
+    {
+        MongoCollection<Group> taskCollection = getTable("groups").withDocumentClass(Task.class);
+
+        ArrayList<Group> result = null;
+            result = taskCollection.find(Group.class).into(new ArrayList<Group>());
+        return result;
+    }
+
+
     //1. insert User
     public static boolean insertUser(User inputUser) {
 
@@ -100,14 +112,6 @@ public class Util {
         return true;
     }
 
-    public static void testInsertUser() {
-//        User u = new User("maimai", "maimai", "thi.tran@mum.edu", "0908112345", 1, "IT");
-//        insertUser(u);
-        MongoCollection<Task> taskCollection = getTable("users").withDocumentClass(User.class);
-        Collection<User> result = taskCollection.find(User.class).into(new ArrayList<User>());
-
-        result.forEach(System.out::println);
-    }
 
     //2. insert Task
     public static boolean insertTask(Task inputTask) {
@@ -170,6 +174,7 @@ public class Util {
 
     }
 
+
     // Deprecated method
     //4. insert User
 //    public static ArrayList<Task> getTaskList(int assignedUserId) {
@@ -225,6 +230,10 @@ public class Util {
         return res;
     }
 
+
+
+
+
     public static ArrayList<Document> getTaskListJson(int assignedUserId) {
         // View DB data
         List<Document> taskListDB = new ArrayList<>();
@@ -273,6 +282,31 @@ public class Util {
 
     /*---------------------------Test Code with void main--------------------------*/
 
+    //4. insert User
+    public static void testInsertUser() {
+//        User u = new User("maimai", "maimai", "thi.tran@mum.edu", "0908112345", 1, "IT");
+//        insertUser(u);
+        MongoCollection<Task> taskCollection = getTable("users").withDocumentClass(User.class);
+        Collection<User> result = taskCollection.find(User.class).into(new ArrayList<User>());
+
+        result.forEach(System.out::println);
+    }
+
+
+    public static void insertGroupName() {
+
+        // Get the mongodb collection.
+        MongoCollection userCollection = getTable("groups");
+        userCollection.deleteMany(new Document());
+
+        MongoCollection<Document> groupsCollection = getTable("groups");
+        groupsCollection.insertOne(new Document().append("_id",1).append("name","IT"));
+        groupsCollection.insertOne(new Document().append("_id",2).append("name","Sales"));
+        groupsCollection.insertOne(new Document().append("_id",3).append("name","Finance"));
+        groupsCollection.insertOne(new Document().append("_id",4).append("name","HR"));
+
+
+    }
 
     public static void testUpdateTask() {
 
@@ -353,9 +387,11 @@ public class Util {
 
 
        // testInsertTask();
-//       getUserList(1).forEach(System.out::println);
-//       getTaskListByGroup(1).forEach(System.out::println);
-//        getGroupofUser(4);
+
+
+        insertGroupName();
+
+        getAllGroups().forEach(System.out::println);
     }
 
 }

@@ -94,8 +94,16 @@ tasksController = function() {
 				);
 				
 				$(taskPage).find('#tblTasks tbody').on('click', '.editRow', 
-					function(evt) { 
-						$(taskPage).find('#taskCreation').removeClass('not');
+					function(evt) {
+
+					var taskId = $(evt.target).data().taskId;
+
+						console.log("Edit task id:");
+					console.log(taskId);
+
+					$("#taskForm #taskEditId").val(taskId);
+
+					$(taskPage).find('#taskCreation').removeClass('not');
 						storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
 							$(taskPage).find('form').fromObject(task);
 						}, errorLogger);
@@ -128,7 +136,7 @@ tasksController = function() {
 							$(taskPage).find('#taskCreation').addClass('not');
 						}, errorLogger);
 
-						$.ajax("/InsertTaskServlet", {
+						$.ajax("/EditTaskServlet", {
 							"type": "POST",
 							 data: task
 						}).done(displayTasksServer.bind());
