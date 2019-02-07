@@ -68,6 +68,9 @@ public class LoginServlet extends HttpServlet {
         request.getSession().setAttribute("group", group);
         request.getSession().setAttribute("taskList", taskList);
         request.getSession().setAttribute("userInGroup", userInGroup);
+
+        request.getSession().setAttribute("taskListJSon", new Gson().toJson(taskList));
+        System.out.println(new Gson().toJson(taskList));
     }
 
 }
