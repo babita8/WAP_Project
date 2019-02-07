@@ -92,7 +92,7 @@
 <main  id="taskPage">
     <section id="taskCreation" class="not">
         <form id="taskForm">
-
+            <div id="allowToClear">
             <div>
                 <label>Task</label> <input type="text" required="required"
                                            name="task" class="large" placeholder="Breakfast at Tiffanys" maxlength="200"  />
@@ -108,7 +108,7 @@
             </select>
             </div>
                 <!-- Rating Stars Box -->
-            <div>
+     
             <label>Priority</label>
                 <div class='rating-stars text-center'>
                     <ul id='stars'>
@@ -129,22 +129,25 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+
 
             <div>
                 <label>Assigned to</label>
                 <select name="assigned">
                     <option value="${user.id}">you</option>
-                    <c:forEach var = "i" items ="${userInGroup}">
-                        <option value="${i.id}">${i.userName}</option>
+                    <c:forEach var = "i" items ="${groupMembers}">
+                        <option value="${i._id}">${i.userName}</option>
                     </c:forEach>
                 </select>
             </div>
 
+                <input type="hidden" id="myhidStars" name="star" value=""/>
+                <input type="hidden" name="_id" id="taskEditId" value="${task.id}" />
+
+            </div>
+
             <input type="hidden" name="myhidCreate" value="${user.id}"/>
-            <input type="hidden" id="myhidStars" name="star" value="${user.id}"/>
-            <input type="hidden" name="editOrInsert" value="insert"/>
-            <input type="hidden" name="_id" id="taskEditId" value="${task.id}" />
+
             <nav>
                 <a href="#" id="saveTask">Save task</a>    <!-- https://stackoverflow.com/questions/4855168/what-is-href-and-why-is-it-used -->
                 <a href="#" id="clearTask">Clear task</a>

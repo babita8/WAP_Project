@@ -41,7 +41,12 @@ tasksController = function() {
 	}
 	
 	function clearTask() {
-		$(taskPage).find('form').fromObject({});
+	//	$('#parent > input:text:not(".ignore")').val('');
+		var stars = $('#stars li').parent().children('li.star');
+		for (i = 0; i < stars.length; i++) {
+			$(stars[i]).removeClass('selected');
+		}
+		$(taskPage).find('#allowToClear').fromObject({});
 	}
 	
 	function renderTable() {
@@ -92,6 +97,17 @@ tasksController = function() {
 								$(evt.target).parents('tr').remove();
 								taskCountChanged();
 							}, errorLogger);
+
+						var task = $(evt.target).data().taskId;
+						console.log('delete task');
+
+						console.log(task);
+
+						$.ajax("/DeleteTaskServlet", {
+							"type": "POST",
+							data: {"taskid": task}
+
+						}).done(displayTasksServer.bind());
 
 					}
 				);
