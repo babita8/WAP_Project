@@ -225,11 +225,8 @@ tasksController = function() {
                 $('#taskRow').tmpl(task).appendTo($(taskPage).find('#tblTasks tbody'));
                 taskCountChanged();
                 console.log('about to render table with server tasks');
-<<<<<<< .mine
-                //renderTable(); --skip for now, this just sets style class for overdue tasks 111917kl4
-=======
+
                 renderTable(); //skip for now, this just sets style class for overdue tasks 111917kl
->>>>>>> .theirs
             });
 		},
 		loadTasks : function() {
