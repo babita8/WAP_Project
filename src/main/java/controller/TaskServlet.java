@@ -24,8 +24,7 @@ public class TaskServlet extends HttpServlet {
 
         System.out.println("POST TaskServlet");
         User loginUser = (User) request.getSession().getAttribute("user");
-        ArrayList<User> userInGroup = new ArrayList<User>(1);
-        userInGroup.add(loginUser);
+
 
         // Load task list of all members of group which logged in user belongs to
         Document group = Util.getGroupofUser(loginUser.getId());
@@ -38,9 +37,12 @@ public class TaskServlet extends HttpServlet {
         request.getSession().setAttribute("group", group);
         request.getSession().setAttribute("taskList", taskList);
 
-        request.getSession().setAttribute("userInGroup", userInGroup);
+
+
+
 
         //request.getRequestDispatcher("tasks.jsp").forward(request, response);
+        request.getSession().setAttribute("taskListJSon", new Gson().toJson(taskList));
         response.sendRedirect("tasks.jsp");
 
 

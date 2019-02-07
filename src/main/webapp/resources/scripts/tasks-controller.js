@@ -30,9 +30,7 @@ tasksController = function() {
      */
 
     function displayTasksServer(data) { //this needs to be bound to the tasksController -- used bind in retrieveTasksServer 111917kl
-    	console.log(data);
-
-        tasksController.loadServerTasks(data);
+    	tasksController.loadServerTasks(data);
     }
 	
 	function taskCountChanged() {
@@ -48,6 +46,25 @@ tasksController = function() {
 		}
 		$(taskPage).find('#allowToClear').fromObject({});
 	}
+
+	function setRateStar() {
+
+		var rate = $("#myhidStars").val();
+
+		var stars = $('#stars li').parent().children('li.star');
+
+		for (i = 0; i < 5; i++) {
+			$(stars[i]).removeClass('selected');
+		}
+
+		for (i = 0; i < rate; i++) {
+			$(stars[i]).addClass('selected');
+		}
+
+
+
+
+	}
 	
 	function renderTable() {
 		$.each($(taskPage).find('#tblTasks tbody tr'), function(idx, row) {
@@ -60,7 +77,11 @@ tasksController = function() {
 		});
 	}
 	
-	return { 
+	return {
+		taskListSet : function(value)
+		{
+			taskListEdit = value;
+		},
 		init : function(page, callback) { 
 			if (initialised) {
 				callback()
@@ -114,35 +135,26 @@ tasksController = function() {
 				
 				$(taskPage).find('#tblTasks tbody').on('click', '.editRow', 
 					function(evt) {
-
-
 					var taskId = $(evt.target).data().taskId;
-
-					console.log("Edit task id:");
-					console.log( taskId);
 					$("#taskForm #taskEditId").val(taskId);
-					console.log(taskListEdit);
-
 					var editTask = null;
-					$.each(taskListEdit, function (index, task) {
-
-
+					$.each(Array.from(taskListEdit), function (index, task) {
 						if (task._id === taskId) {
-							console.log("correct ID:" + task._id);
 							console.log("Task List Edit");
 							console.log(task);
 							editTask = task;
 						}else{
 							console.log("Incorrect ID:" + task.id + " " +taskId );
-
 						}
 
 					});
 
-
 					$(taskPage).find('#taskCreation').removeClass('not');
-					$(taskPage).find('form').fromObject(editTask);
+					//console.log(editTask.get("_id"))
+						//$(taskPage).find('form').fromObject(editTask);
+					$(taskPage).find('#allowToClear').fromObject(editTask);
 
+					setRateStar();
 
 					//$(taskPage).find('form').fromObject(task);
 					// 	storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
@@ -194,8 +206,7 @@ tasksController = function() {
          */
 		loadServerTasks: function(tasks) {
             $(taskPage).find('#tblTasks tbody').empty();
-
-			taskListEdit =tasks;
+            taskListEdit =tasks;
             $.each(tasks, function (index, task) {
                 if (!task.complete) {
                     task.complete = false;
@@ -203,7 +214,7 @@ tasksController = function() {
                 $('#taskRow').tmpl(task).appendTo($(taskPage).find('#tblTasks tbody'));
                 taskCountChanged();
                 console.log('about to render table with server tasks');
-                //renderTable(); --skip for now, this just sets style class for overdue tasks 111917kl
+                //renderTable(); --skip for now, this just sets style class for overdue tasks 111917kl4
             });
 		},
 		loadTasks : function() {
@@ -261,6 +272,7 @@ $(document).ready(function(){
 	/* 2. Action to perform on click */
 	$('#stars li').on('click', function(){
 		var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
 		var stars = $(this).parent().children('li.star');
 
 		for (i = 0; i < stars.length; i++) {
@@ -271,18 +283,7 @@ $(document).ready(function(){
 			$(stars[i]).addClass('selected');
 		}
 
-		// JUST RESPONSE (Not needed)
-		var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-		var msg = "";
-		if (ratingValue > 1) {
-			msg = "Thanks! You rated this " + ratingValue + " stars.";
-		}
-		else {
-			msg = "We will improve ourselves. You rated this " + ratingValue + " stars.";
-		}
-		responseMessage(msg);
-
-		$("#myhidStars").val(ratingValue);
+		$("#myhidStars").val(onStar);
 
 	});
 
@@ -290,7 +291,3 @@ $(document).ready(function(){
 });
 
 
-function responseMessage(msg) {
-	/*$('.success-box').fadeIn(200);
-	$('.success-box div.text-message').html("<span>" + msg + "</span>");*/
-}

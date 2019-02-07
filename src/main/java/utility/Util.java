@@ -7,6 +7,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
+import com.mongodb.client.result.DeleteResult;
 import model.Group;
 import model.Task;
 import model.User;
@@ -72,6 +73,38 @@ public class Util {
         System.out.println("Found this user:" + myUser);
         return myUser;
 
+
+    }
+
+    //3. Delete Task
+    public static boolean deleteTask(int inputTaskId) {
+
+        try {
+            MongoCollection<Document> taskCollection = getTable("tasklist");
+            // findOneAndUpdate using JSON into MongoDB
+
+            BasicDBObject query = new BasicDBObject();
+            query.append("_id", inputTaskId);
+
+            Bson filter = Filters.eq("_id", inputTaskId);
+
+            Bson newDocument = new Document(query);
+
+            DeleteResult result =  taskCollection.deleteOne(filter);
+
+
+            if (result.getDeletedCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
     }
 

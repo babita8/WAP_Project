@@ -41,7 +41,7 @@ public class EditTaskServlet extends HttpServlet {
 
         // Checking for null and empty values
 
-        if (taskId == null) {
+        if (taskId.equals("")) {
             //todo insert
 
             System.out.println("POST from EditTaskServlet With AJAX Insert");
@@ -73,8 +73,9 @@ public class EditTaskServlet extends HttpServlet {
             String category = req.getParameter("category");
             int createUser = Integer.parseInt(req.getParameter("myhidCreate"));
             String dueDate = req.getParameter("dueDate");
-           int priority = Integer.parseInt(req.getParameter("star"));
-
+            int priority = Integer.parseInt(req.getParameter("priority"));
+            if(priority==0)
+                priority = 1;
             String task = req.getParameter("task");
             int id = Integer.parseInt(req.getParameter("_id"));
             Task insertTask = new Task(id, task, dueDate, category, priority, assignUser, createUser);
