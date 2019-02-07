@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Projections.*;
 
 public class Util {
@@ -68,7 +69,7 @@ public class Util {
         // Get the mongodb collection.
         MongoCollection<User> col = getTable(db_collection_name).withDocumentClass(User.class);
 
-        User myUser = col.find(Filters.and(Filters.eq("userName", userName), Filters.eq("passWord", passWord)), User.class).first();
+        User myUser = col.find(Filters.and(eq("userName", userName), eq("passWord", passWord)), User.class).first();
 
         System.out.println("Found this user:" + myUser);
         return myUser;
@@ -252,7 +253,20 @@ public class Util {
 
     }
 
+    // Mark task as Complete
+    public static boolean completeTask(int taskId) {
+        boolean res = true;
 
+        try {
+            MongoCollection<Document> taskCollection = getTable("tasklist");
+            taskCollection.updateOne(eq("_id", taskId),new Document("$set", new Document("status", "Complete")));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            res = false;
+        }
+        return res;
+    }
     // Deprecated method
     //4. insert User
 //    public static ArrayList<Task> getTaskList(int assignedUserId) {
@@ -277,7 +291,7 @@ public class Util {
     public static Document getGroupofUser(int userId) {
         MongoCollection<Document> userCol = getTable("users");
 
-        Document res = userCol.find(Filters.eq("_id", userId))
+        Document res = userCol.find(eq("_id", userId))
                                 .projection(fields(include("groupId", "group"), exclude("_id")))
                                 .first();
         System.out.println("**************************************");
@@ -290,7 +304,7 @@ public class Util {
         MongoCollection<Document> userCol = getTable("users");
         ArrayList<Document> res = new ArrayList<>();
         if(groupId > 0)
-            userCol.find(Filters.eq("groupId", groupId))
+            userCol.find(eq("groupId", groupId))
                     .projection(fields(include("_id", "userName"))).into(res);
         else
             userCol.find()
@@ -469,9 +483,12 @@ public class Util {
        // testInsertTask();
 
 
-        insertGroupName();
+//        insertGroupName();
 
-        getAllGroups().forEach(System.out::println);
+//        getAllGroups().forEach(System.out::println);
+
+//        completeTask(25);
+//        getTaskListJson(1).forEach(System.out::println);
     }
 
 }

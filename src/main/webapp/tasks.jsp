@@ -183,9 +183,11 @@
 
             <c:forEach var = "i" items ="${taskList}">
                 <tr>
-                    <td>${i.get("task")}</td>
-                    <td>${i.get("dueDate")}</td>
-                    <td>${i.get("category")}</td>
+                    <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("task")}</td>
+                    <td>
+                        <time <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if> datetime="${i.get("dueDate")}">${i.get("dueDate")}</time>
+                    </td>
+                    <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("category")}</td>
                     <td>
                         <c:forEach var="no" begin="1" end="${i.get('priority')}">
                              <span class="fa fa-star checked"></span>
@@ -194,12 +196,14 @@
                              <span class="fa fa-star"></span>
                         </c:forEach>
                     </td>
-                    <td>${i.get("AssUser")[0].get("userName")}</td>
-                    <td>${i.get("CrUser")[0].get("userName")}</td>
-                    <td>${i.get("status")}</td>
+                    <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("AssUser")[0].get("userName")}</td>
+                    <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("CrUser")[0].get("userName")}</td>
+                    <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("status")}</td>
                     <td>
-                        <a href="#" class="editRow" data-task-id="${i.get('_id')}">Edit</a>
-                        <a href="#" class="completeRow" data-task-id="${i.get('_id')}">Complete</a>
+                        <c:if test = "${i.get('status') != 'Complete'}">
+                            <a href="#" class="editRow" data-task-id="${i.get('_id')}">Edit</a>
+                            <a href="#" class="completeRow" data-task-id="${i.get('_id')}">Complete</a>
+                        </c:if>
                         <a href="#" class="deleteRow" data-task-id="${i.get('_id')}">Delete</a>
                     </td>
                </tr>
@@ -283,11 +287,11 @@
 
 <script id="taskRow" type="text/x-jQuery-tmpl">
 <tr>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= task}}</td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= dueDate}}</td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= category}}</td>
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}>{{= task}}</td>
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}><time datetime="{{= dueDate}}">{{= dueDate}}</time></td>
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}>{{= category}}</td>
 	<%--<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= priority}}</td>--%>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>
+	<td>
         {{var abc= priority}}
         {{var xyz=5- priority}}
         {{each(i) Array.apply(null, {length: abc }).map(Number.call, Number)}}
@@ -297,13 +301,13 @@
             <span class="fa fa-star"></span>
         {{/each}}
     </td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= AssUser[0].userName}}
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}>{{= AssUser[0].userName}}
 	</td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= CrUser[0].userName}}</td>
-	<td {{if complete == true}}class="taskCompleted"{{/if}}>{{= status}}</td>
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}>{{= CrUser[0].userName}}</td>
+	<td {{if status == 'Complete'}}class="taskCompleted"{{/if}}>{{= status}}</td>
 	<td>
 		<nav>
-			{{if complete != true}}
+			{{if status != 'Complete'}}
 				<a href="#" class="editRow" data-task-id="{{= _id}}">Edit</a>
 				<a href="#" class="completeRow" data-task-id="{{= _id}}">Complete</a>
 			{{/if}}
