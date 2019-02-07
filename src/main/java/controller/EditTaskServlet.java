@@ -49,7 +49,7 @@ public class EditTaskServlet extends HttpServlet {
             String category = req.getParameter("category");
             int createUser = Integer.parseInt(req.getParameter("myhidCreate"));
             String dueDate = req.getParameter("dueDate");
-            int priority = Integer.parseInt(req.getParameter("star"));
+            int priority = Integer.parseInt(req.getParameter("priority"));
 
             String task = req.getParameter("task");
             Task insertTask = new Task(task, dueDate, category, priority, assignUser, createUser);

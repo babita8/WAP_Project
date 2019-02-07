@@ -192,7 +192,7 @@
                         <c:forEach var="no" begin="1" end="${i.get('priority')}">
                              <span class="fa fa-star checked"></span>
                         </c:forEach>
-                        <c:forEach var="no" begin="${i.get('priority')}" end="5">
+                        <c:forEach var="no" begin="${i.get('priority')+1}" end="5">
                              <span class="fa fa-star"></span>
                         </c:forEach>
                     </td>
