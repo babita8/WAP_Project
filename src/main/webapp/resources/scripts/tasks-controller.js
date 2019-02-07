@@ -142,12 +142,23 @@ tasksController = function() {
 				});
 				
 				$(taskPage).find('#tblTasks tbody').on('click', '.completeRow', function(evt) { 					
-					storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
-						task.complete = true;
-						storageEngine.save('task', task, function() {
-							tasksController.loadTasks();
-						},errorLogger);
-					}, errorLogger);
+					// storageEngine.findById('task', $(evt.target).data().taskId, function(task) {
+					// 	task.complete = true;
+					// 	storageEngine.save('task', task, function() {
+					// 		tasksController.loadTasks();
+					// 	},errorLogger);
+					// }, errorLogger);
+                    var row = evt.target;
+					var taskId = $(row).data().taskId;
+					console.log("taskId: " + taskId + " will be marked as Complete");
+					$.ajax("/CompleteTaskServlet", {
+						"type": "POST",
+						data: {"taskId" : taskId}
+					}).done(function() {
+					    $(row).parent().siblings().not(":has(span)").addClass("taskCompleted");
+					    $(row).siblings().addBack().not(".deleteRow").remove();
+
+                    });
 				});
 				
 				$(taskPage).find('#saveTask').click(function(evt) {
@@ -187,24 +198,29 @@ tasksController = function() {
                 $('#taskRow').tmpl(task).appendTo($(taskPage).find('#tblTasks tbody'));
                 taskCountChanged();
                 console.log('about to render table with server tasks');
-                //renderTable(); --skip for now, this just sets style class for overdue tasks 111917kl
+                renderTable(); //skip for now, this just sets style class for overdue tasks 111917kl
             });
 		},
 		loadTasks : function() {
 			/*$(taskPage).find('#tblTasks tbody').empty();*/
-			storageEngine.findAll('task', function(tasks) {
-				tasks.sort(function(o1, o2) {
-					return Date.parse(o1.requiredBy).compareTo(Date.parse(o2.requiredBy));
-				});
-				$.each(tasks, function(index, task) {
-					if (!task.complete) {
-						task.complete = false;
-					}
-					$('#taskRow').tmpl(task).appendTo($(taskPage).find('#tblTasks tbody'));
-					taskCountChanged();
-					renderTable();
-				});
-			}, errorLogger);
+			// Testing
+			// storageEngine.findAll('task', function(tasks) {
+			// 	tasks.sort(function(o1, o2) {
+			// 		return Date.parse(o1.requiredBy).compareTo(Date.parse(o2.requiredBy));
+			// 	});
+			// 	$.each(tasks, function(index, task) {
+			// 		task.complete = false;
+			// 		if (!task.complete) {
+			// 			task.complete = false;
+			// 		}
+			// 		$('#taskRow').tmpl(task).appendTo($(taskPage).find('#tblTasks tbody'));
+			// 		taskCountChanged();
+			// 		renderTable();
+			// 	});
+			// }, errorLogger);
+				taskCountChanged();
+				renderTable();
+			// End of testing
 		} 
 	} 
 }();

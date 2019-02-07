@@ -53,5 +53,12 @@
         <url-pattern>/EditTaskServlet</url-pattern>
     </servlet-mapping>
 
-
+    <servlet>
+        <servlet-name>CompleteTaskServlet</servlet-name>
+        <servlet-class>controller.CompleteTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompleteTaskServlet</servlet-name>
+        <url-pattern>/CompleteTaskServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
