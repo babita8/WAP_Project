@@ -108,7 +108,7 @@
             </select>
             </div>
                 <!-- Rating Stars Box -->
-     
+
             <label>Priority</label>
                 <div class='rating-stars text-center'>
                     <ul id='stars'>
@@ -141,7 +141,7 @@
                 </select>
             </div>
 
-                <input type="hidden" id="myhidStars" name="star" value=""/>
+                <input type="hidden" id="myhidStars" name="priority" value=""/>
                 <input type="hidden" name="_id" id="taskEditId" value="${task.id}" />
 
             </div>
@@ -254,6 +254,8 @@
         $(document).ready(function() {
             tasksController.init($('#taskPage'), function() {
                 tasksController.loadTasks();
+                var str = '${taskListJSon}';
+                tasksController.taskListSet($.parseJSON(str));
             });
         });
     }
@@ -276,6 +278,7 @@
                 console.log( 'Failed to load web storage script' );
             });
     }
+
 </script>
 
 <script id="taskRow" type="text/x-jQuery-tmpl">
