@@ -183,7 +183,9 @@ tasksController = function() {
 						"type": "POST",
 						data: {"taskId" : taskId}
 					}).done(function() {
-					    $(row).parent().siblings().not(":has(span)").addClass("taskCompleted");
+					    console.log("Markup css for completeRow");
+					    $(row).parent().parent().prev().text("Complete");
+					    $(row).parent().parent().siblings().not(":has(span)").addClass("taskCompleted");
 					    $(row).siblings().addBack().not(".deleteRow").remove();
 
                     });

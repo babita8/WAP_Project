@@ -5,7 +5,7 @@ $(function() {
     var UNSORT  = 'unsort'  ;
 
     var config  = {
-        defaultColumn:  0,
+        defaultColumn:  1,
         defaultOrder:   'asc',
         styles:         {
             'sort'  :   'sortStyle',

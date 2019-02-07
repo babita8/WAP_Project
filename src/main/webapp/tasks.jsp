@@ -200,11 +200,13 @@
                     <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("CrUser")[0].get("userName")}</td>
                     <td <c:if test = "${i.get('status') == 'Complete'}">class="taskCompleted"</c:if>>${i.get("status")}</td>
                     <td>
-                        <c:if test = "${i.get('status') != 'Complete'}">
-                            <a href="#" class="editRow" data-task-id="${i.get('_id')}">Edit</a>
-                            <a href="#" class="completeRow" data-task-id="${i.get('_id')}">Complete</a>
-                        </c:if>
-                        <a href="#" class="deleteRow" data-task-id="${i.get('_id')}">Delete</a>
+                        <nav>
+                            <c:if test = "${i.get('status') != 'Complete'}">
+                                <a href="#" class="editRow" data-task-id="${i.get('_id')}">Edit</a>
+                                <a href="#" class="completeRow" data-task-id="${i.get('_id')}">Complete</a>
+                            </c:if>
+                            <a href="#" class="deleteRow" data-task-id="${i.get('_id')}">Delete</a>
+                        </nav>
                     </td>
                </tr>
             </c:forEach>
