@@ -1,55 +1,73 @@
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.User;
+import org.bson.Document;
 import utility.Util;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.*;
 
 
 public class LoginServlet extends HttpServlet {
 
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
     private static final long serialVersionUID = 1L;
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    // This method is called by the servlet container to process a 'post' request
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRequest(request, response);
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // User group is faked because no API written get user groups without passing user id
+        Map<Integer, String> groups = new HashMap<>();
+        groups.put(1, "IT");
+        groups.put(2, "Sales");
+        groups.put(3, "Finance");
+        groups.put(4, "HR");
+
+        resp.getWriter().print(gson.toJson(groups));
     }
 
-    public void handleRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // Reading post parameters from the request
-        String param1 = req.getParameter("login_id"),
-                param2 = req.getParameter("login_pwd");
+        String param1 = req.getParameter("login_id");
+        String param2 = req.getParameter("login_pwd");
 
-        // Checking for null and empty values
-        if(param1 == null || param2 == null || "".equals(param1) || "".equals(param2)) {
-            req.setAttribute("error_message", "Please enter login id and password");
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+        if (param1 == null || param2 == null || "".equals(param1) || "".equals(param2)) {
+            resp.getWriter().print("{\"msg\":\"User id and password are both mandatory fields.\"}");
         } else {
             User userFound = Util.searchUserInDb(param1, param2);
-            if(userFound!=null) {
-                req.getSession().setAttribute("user",userFound);
+            if (userFound != null) {
+                req.getSession().setAttribute("user", userFound);
+                loadTasks(req, resp);
+                resp.getWriter().print("{\"redirect\":\"tasks.jsp\"}");
 
-
-
-                resp.setStatus(307); //this makes the redirection keep your requesting method as is.
-                resp.addHeader("Location", "/TaskServlet");
-                //resp.sendRedirect("/taskServlet");
             } else {
-                req.setAttribute("error_message", "You are not an authorised user. Please check with administrator.");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                resp.getWriter().print("{\"msg\":\"User id and/or password incorrect.\"}");
             }
         }
+    }
+
+    private void loadTasks(HttpServletRequest request, HttpServletResponse response) {
+        User loginUser = (User) request.getSession().getAttribute("user");
+        ArrayList<User> userInGroup = new ArrayList<User>(1);
+        userInGroup.add(loginUser);
+
+        // Load task list of all members of group which logged in user belongs to
+        Document group = Util.getGroupofUser(loginUser.getId());
+        List<Document> taskList = Util.getTaskListByGroup((int) group.get("groupId"));
+
+        // Load all members of group which logged in user belongs to
+        List<Document> groupMembers = Util.getUserList((int) group.get("groupId"));
+
+        request.getSession().setAttribute("groupMembers", groupMembers);
+        request.getSession().setAttribute("group", group);
+        request.getSession().setAttribute("taskList", taskList);
+        request.getSession().setAttribute("userInGroup", userInGroup);
     }
 
 }

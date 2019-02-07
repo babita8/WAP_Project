@@ -26,7 +26,7 @@ public class UserProfileController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doPost UserProfileController");
+      //  System.out.println("doPost UserProfileController");
         User user = gson.fromJson(req.getParameter("user"), User.class);
         //System.out.println(user.getUserName());
         Util.upsertUser(user);

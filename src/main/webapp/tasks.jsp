@@ -40,19 +40,19 @@
         <div class="form-group">
             <label for="user_id" class="control-label col-xs-2">User ID:</label>
             <div class="col-xs-5">
-                <input type="text" class="form-control form-control-sm" id="user_id" value="${user.id}" >
+                <input disabled type="text" class="form-control form-control-sm" id="user_id" value="${user.id}" >
             </div>
         </div>
         <div class="form-group">
             <label for="user_group_id" class="control-label col-xs-2">User Group ID:</label>
             <div class="col-xs-5">
-                <input type="text" class="form-control form-control-sm" id="user_group_id" value="${user.groupId}" >
+                <input disabled type="text" class="form-control form-control-sm" id="user_group_id" value="${user.groupId}" >
             </div>
         </div>
         <div class="form-group">
             <label for="user_group" class="control-label col-xs-2">User Group:</label>
             <div class="col-xs-5">
-                <input type="text" class="form-control form-control-sm" id="user_group" value="${user.group}" >
+                <input disabled type="text" class="form-control form-control-sm" id="user_group" value="${user.group}" >
             </div>
         </div>
         <div class="form-group">
@@ -64,19 +64,19 @@
         <div class="form-group">
             <label for="user_pass" class="control-label col-xs-2">Password:</label>
             <div class="col-xs-5">
-                <input type="text" class="editable form-control form-control-sm" id="user_pass" value="${user.passWord}" >
+                <input type="password" class="editable form-control form-control-sm" id="user_pass" value="${user.passWord}" >
             </div>
         </div>
         <div class="form-group">
             <label for="user_email" class="control-label col-xs-2">User Email:</label>
             <div class="col-xs-5">
-                <input type="text" class="editable form-control form-control-sm" id="user_email" value="${user.email}" >
+                <input type="email" class="editable form-control form-control-sm" id="user_email" value="${user.email}" >
             </div>
         </div>
         <div class="form-group">
             <label for="user_phone" class="control-label col-xs-2">User Phone:</label>
             <div class="col-xs-5">
-                <input type="text" class="editable form-control form-control-sm" id="user_phone" value="${user.phone}" >
+                <input type="tel" class="editable form-control form-control-sm" id="user_phone" value="${user.phone}" >
             </div>
         </div>
         <button id="btn_edit" class="btn btn-sm btn-primary">Edit</button>
@@ -253,6 +253,10 @@
         </nav>
     </section>
 </main>
+<div style="text-align: center">
+    <a id="lnk_logout" href="logout">logout</a>
+</div>
+
 <footer>You have <span id="taskCount"></span> tasks</footer>
 </body>
 <script>
